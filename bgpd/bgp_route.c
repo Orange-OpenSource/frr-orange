@@ -4598,7 +4598,7 @@ int bgp_update(struct peer *peer, const struct prefix *p, uint32_t addpath_id,
 
 		/* Nexthop reachability check - for unicast and
 		 * labeled-unicast.. */
-		if (((afi == AFI_IP || afi == AFI_IP6)
+		if (((afi == AFI_IP || afi == AFI_IP6 || afi == AFI_LINK_STATE) /*BGP-LS implementation*/
 		    && (safi == SAFI_UNICAST || safi == SAFI_LABELED_UNICAST))
 		    || (safi == SAFI_EVPN &&
 			bgp_evpn_is_prefix_nht_supported(p))) {

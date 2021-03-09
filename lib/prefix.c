@@ -147,6 +147,8 @@ const char *afi2str(afi_t afi)
 		return "IPv6";
 	case AFI_L2VPN:
 		return "l2vpn";
+	case AFI_LINK_STATE:	/*BGP-LS implementation*/
+		return "link-state";
 	case AFI_MAX:
 		return "bad-value";
 	default:
@@ -172,6 +174,10 @@ const char *safi2str(safi_t safi)
 		return "labeled-unicast";
 	case SAFI_FLOWSPEC:
 		return "flowspec";
+	case SAFI_LINK_STATE:	/*BGP-LS implementation*/
+		return "link-state";
+	case SAFI_LINK_STATE_VPN:	/*BGP-LS implementation*/
+		return "link-state-vpn";
 	default:
 		return "unknown";
 	}

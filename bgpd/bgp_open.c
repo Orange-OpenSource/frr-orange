@@ -167,6 +167,17 @@ void bgp_capability_vty_out(struct vty *vty, struct peer *peer, bool use_json,
 						"capabilityErrorMultiProtocolAfi",
 						"L2VPN");
 					break;
+
+				/*BGP-LS implementation*/
+				/* AFI LINK STATE */
+				case AFI_LINK_STATE:
+					json_object_string_add(
+						json_cap,
+						"capabilityErrorMultiProtocolAfi",
+						"Link State");
+					break;
+				/*BGP-LS implementation*/
+
 				default:
 					json_object_int_add(
 						json_cap,
@@ -217,6 +228,23 @@ void bgp_capability_vty_out(struct vty *vty, struct peer *peer, bool use_json,
 						"capabilityErrorMultiProtocolSafi",
 						"flowspec");
 					break;
+
+				/*BGP-LS implementation*/
+				/* SAFI LINK STATE */
+				case SAFI_LINK_STATE:
+					json_object_string_add(
+						json_cap,
+						"capabilityErrorMultiProtocolSafi",
+						"Link State");
+					break;
+				case SAFI_LINK_STATE_VPN:
+					json_object_string_add(
+						json_cap,
+						"capabilityErrorMultiProtocolSafi",
+						"Link State VPN");
+					break;
+				/*BGP-LS implementation*/
+
 				default:
 					json_object_int_add(
 						json_cap,
@@ -237,6 +265,13 @@ void bgp_capability_vty_out(struct vty *vty, struct peer *peer, bool use_json,
 				case AFI_L2VPN:
 					vty_out(vty, "AFI L2VPN, ");
 					break;
+				/*BGP-LS implementation*/
+				/* AFI LINK STATE */
+				case AFI_LINK_STATE:
+					vty_out(vty, "AFI Link State, ");
+					break;
+				/*BGP-LS implementation*/
+
 				default:
 					vty_out(vty, "AFI Unknown %d, ",
 						ntohs(mpc.afi));
@@ -264,6 +299,17 @@ void bgp_capability_vty_out(struct vty *vty, struct peer *peer, bool use_json,
 				case SAFI_EVPN:
 					vty_out(vty, "SAFI EVPN");
 					break;
+
+				/*BGP-LS implementation*/
+				/* SAFI LINK STATE */
+				case SAFI_LINK_STATE:
+					vty_out(vty, "SAFI LINK STATE");
+					break;
+				case SAFI_LINK_STATE_VPN:
+					vty_out(vty, "SAFI LINK STATE VPN");
+					break;
+				/*BGP-LS implementation*/
+
 				default:
 					vty_out(vty, "SAFI Unknown %d ",
 						mpc.safi);
@@ -1417,7 +1463,11 @@ int bgp_open_option_parse(struct peer *peer, uint16_t length,
 		    && !peer->afc_nego[AFI_IP6][SAFI_MPLS_VPN]
 		    && !peer->afc_nego[AFI_IP6][SAFI_ENCAP]
 		    && !peer->afc_nego[AFI_IP6][SAFI_FLOWSPEC]
-		    && !peer->afc_nego[AFI_L2VPN][SAFI_EVPN]) {
+		    && !peer->afc_nego[AFI_L2VPN][SAFI_EVPN]
+			/*BGP-LS implementation*/
+			&& !peer->afc_nego[AFI_LINK_STATE][SAFI_LINK_STATE]
+			&& !peer->afc_nego[AFI_LINK_STATE][SAFI_LINK_STATE_VPN]) {
+			/*BGP-LS implementation*/
 			flog_err(EC_BGP_PKT_OPEN,
 				 "%s [Error] Configured AFI/SAFIs do not overlap with received MP capabilities",
 				 peer->host);

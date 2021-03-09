@@ -348,7 +348,8 @@ typedef enum {
 	AFI_IP = 1,
 	AFI_IP6 = 2,
 	AFI_L2VPN = 3,
-	AFI_MAX = 4
+	AFI_LINK_STATE = 4,	/*BGP-LS implementation*/
+	AFI_MAX = 5
 } afi_t;
 
 #define IS_VALID_AFI(a) ((a) > AFI_UNSPEC && (a) < AFI_MAX)
@@ -363,7 +364,9 @@ typedef enum {
 	SAFI_EVPN = 5,
 	SAFI_LABELED_UNICAST = 6,
 	SAFI_FLOWSPEC = 7,
-	SAFI_MAX = 8
+	SAFI_LINK_STATE = 8, /* BGP-LS RFC 7752 */	/*BGP-LS implementation*/
+	SAFI_LINK_STATE_VPN = 9, /* BGP-LS RFC 7752 */	/*BGP-LS implementation*/
+	SAFI_MAX = 10
 } safi_t;
 
 #define FOREACH_AFI_SAFI(afi, safi)                                            \

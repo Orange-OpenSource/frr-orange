@@ -94,6 +94,8 @@
 #include "bgpd/bgp_mac.h"
 #include "bgpd/bgp_orr.h"
 
+#include "bgpd/bgp_ls.h"	/*BGP-LS implementation*/
+
 DEFINE_MTYPE_STATIC(BGPD, PEER_TX_SHUTDOWN_MSG, "Peer shutdown message (TX)");
 DEFINE_MTYPE_STATIC(BGPD, BGP_EVPN_INFO, "BGP EVPN instance information");
 DEFINE_QOBJ_TYPE(bgp_master);
@@ -1964,6 +1966,12 @@ void peer_as_change(struct peer *peer, as_t as, int as_specified)
 			   PEER_FLAG_REFLECTOR_CLIENT);
 		UNSET_FLAG(peer->af_flags[AFI_L2VPN][SAFI_EVPN],
 			   PEER_FLAG_REFLECTOR_CLIENT);
+		/*BGP-LS implementation*/
+		UNSET_FLAG(peer->af_flags[AFI_LINK_STATE][SAFI_LINK_STATE],
+		       PEER_FLAG_REFLECTOR_CLIENT);
+		UNSET_FLAG(peer->af_flags[AFI_LINK_STATE][SAFI_LINK_STATE_VPN],
+		       PEER_FLAG_REFLECTOR_CLIENT);
+		/*BGP-LS implementation*/
 	}
 }
 
@@ -4215,7 +4223,9 @@ bool peer_active(struct peer *peer)
 	    || peer->afc[AFI_IP6][SAFI_MPLS_VPN]
 	    || peer->afc[AFI_IP6][SAFI_ENCAP]
 	    || peer->afc[AFI_IP6][SAFI_FLOWSPEC]
-	    || peer->afc[AFI_L2VPN][SAFI_EVPN])
+	    || peer->afc[AFI_L2VPN][SAFI_EVPN]
+		|| peer->afc[AFI_LINK_STATE][SAFI_LINK_STATE]	/*BGP-LSimplementation*/
+		|| peer->afc[AFI_LINK_STATE][SAFI_LINK_STATE_VPN])	/*BGP-LSimplementation*/
 		return true;
 	return false;
 }
@@ -4235,7 +4245,9 @@ bool peer_active_nego(struct peer *peer)
 	    || peer->afc_nego[AFI_IP6][SAFI_MPLS_VPN]
 	    || peer->afc_nego[AFI_IP6][SAFI_ENCAP]
 	    || peer->afc_nego[AFI_IP6][SAFI_FLOWSPEC]
-	    || peer->afc_nego[AFI_L2VPN][SAFI_EVPN])
+	    || peer->afc_nego[AFI_L2VPN][SAFI_EVPN]
+		|| peer->afc_nego[AFI_LINK_STATE][SAFI_LINK_STATE]	/*BGP-LSimplementation*/
+		|| peer->afc_nego[AFI_LINK_STATE][SAFI_LINK_STATE_VPN])	/*BGP-LSimplementation*/
 		return true;
 	return false;
 }
@@ -8116,6 +8128,14 @@ void bgp_init(unsigned short instance)
 #endif
 	bgp_ethernetvpn_init();
 	bgp_flowspec_vty_init();
+
+/*BGP-LS implementation*/
+
+	bgp_link_state_init();
+	bgp_mp_reach_init();
+
+/*BGP-LS implementation*/
+
 
 	/* Access list initialize. */
 	access_list_init();

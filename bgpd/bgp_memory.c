@@ -143,3 +143,5 @@ DEFINE_MTYPE(BGPD, BGP_NOTIFICATION, "BGP Notification Message");
 DEFINE_MTYPE(BGPD, BGP_ORR_GROUP, "BGP Optimal Route Reflection Group");
 DEFINE_MTYPE(BGPD, BGP_ORR_GROUP_NAME,
 	     "BGP Optimal Route Reflection Group Name");
+
+DEFINE_MTYPE(BGPD, BGP_LSDB, "BGP Link State Data Base");	/*BGP-LS implementation*/

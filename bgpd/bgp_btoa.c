@@ -190,6 +190,11 @@ int main(int argc, char **argv)
 			case AFI_IP6:
 				printf("/AFI_IP6\n");
 				break;
+			/*BGP-LS implementation*/
+			case AFI_LINK_STATE:
+				printf("/AFI_LINK_STATE\n");
+				break;
+			/*BGP-LS implementation*/
 			default:
 				printf("/UNKNOWN %d", subtype);
 				break;
