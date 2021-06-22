@@ -1485,6 +1485,11 @@ module frr-isisd {
           type inet:ipv6-address;
           description
             "Stable IPv6 address of the advertising router.";
+        leaf export {
+          type boolean;
+          default "false";
+          description
+            "Export Link State informatin.";
         }
       }
 

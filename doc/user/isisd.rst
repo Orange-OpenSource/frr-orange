@@ -334,6 +334,11 @@ Traffic Engineering
 
    Configure stable IPv6 address for MPLS-TE.
 
+.. clicmd:: mpls-te export
+
+   Export Traffic Engineering Data Base to other daemons through the ZAPI
+   Opaque Link State messages.
+
 .. clicmd:: show isis mpls-te interface
 
 .. clicmd:: show isis mpls-te interface INTERFACE
@@ -343,6 +348,16 @@ Traffic Engineering
 .. clicmd:: show isis mpls-te router
 
    Show Traffic Engineering router parameters.
+
+.. clicmd:: show isis [vrf <NAME|all>] mpls-te database [detail|json]
+
+.. clicmd:: show isis [vrf <NAME|all>] mpls-te database vertex [WORD] [detail|json]
+
+.. clicmd:: show isis [vrf <NAME|all>] mpls-te database edge [A.B.C.D|X:X::X:X] [detail|json]
+
+.. clicmd:: show isis [vrf <NAME|all>] mpls-te database subnet [A.B.C.D/M|X:X::X:X/M] [detail|json]
+
+   Show Traffic Engineering Database
 
 .. seealso::
 
@@ -452,6 +467,10 @@ Debugging ISIS
 
 
    Update related packets.
+
+.. clicmd:: debug isis te-events
+
+   IS-IS Traffic Engineering events
 
 .. clicmd:: debug isis sr-events
 
