@@ -1083,6 +1083,14 @@ static void lsp_build(struct isis_lsp *lsp, struct isis_area *area)
 			  area->area_tag);
 	}
 
+	if (IS_MPLS_TE(area->mta)
+	    && !IN6_IS_ADDR_UNSPECIFIED(&area->mta->router_id_ipv6)) {
+		lsp_debug("ISIS (%s): Adding IPv6 TE Router ID tlv.",
+			  area->area_tag);
+		isis_tlvs_set_te_router_id_ipv6(lsp->tlvs,
+						&area->mta->router_id_ipv6);
+	}
+
 	lsp_debug("ISIS (%s): Adding circuit specific information.",
 		  area->area_tag);
 
@@ -1617,6 +1625,7 @@ static void lsp_build_pseudo(struct isis_lsp *lsp, struct isis_circuit *circuit,
 	struct list *adj_list;
 	struct listnode *node;
 	struct isis_area *area = circuit->area;
+	uint16_t mtid;
 
 	lsp_clear_data(lsp);
 	lsp->tlvs = isis_alloc_tlvs();
@@ -1646,8 +1655,11 @@ static void lsp_build_pseudo(struct isis_lsp *lsp, struct isis_circuit *circuit,
 			LSP_PSEUDO_ID(ne_id));
 	}
 	if (circuit->area->newmetric) {
-		isis_tlvs_add_extended_reach(lsp->tlvs, ISIS_MT_IPV4_UNICAST,
-					     ne_id, 0, NULL);
+		if (area_is_mt(circuit->area))
+			mtid = ISIS_MT_IPV4_UNICAST;
+		else
+			mtid = ISIS_MT_DISABLE;
+		isis_tlvs_add_extended_reach(lsp->tlvs, mtid, ne_id, 0, NULL);
 		lsp_debug(
 			"ISIS (%s): Adding %s.%02x as te-style neighbor (self)",
 			area->area_tag, sysid_print(ne_id),
